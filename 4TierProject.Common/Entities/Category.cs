@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace _4TierProject.Common.Entities
 {
-    public class Category
+    [Table("Categories")]
+    public class Category : EntityBase
     {
-        public int Id { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public bool IsDeleted { get; set; }
-
         public string CategoryName { get; set; }
 
         public string Description { get; set; }

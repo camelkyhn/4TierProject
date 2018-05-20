@@ -1,25 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace _4TierProject.Common.Entities
 {
-    public class Order
+    [Table("Orders")]
+    public class Order : EntityBase
     {
-        public int Id { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public Nullable<DateTime> CreatedDate { get; set; }
-
-        public Nullable<DateTime> DeletedDate { get; set; }
-
-        public Nullable<DateTime> UpdatedDate { get; set; }
-
         public string UserName { get; set; }
 
         public string FirstName { get; set; }
