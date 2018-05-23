@@ -396,7 +396,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>13387</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:13387/</IISUrl>
+          <IISUrl>http://192.168.1.21:80/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
