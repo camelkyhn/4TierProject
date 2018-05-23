@@ -1,0 +1,21 @@
+﻿@model _4TierProject.Common.Entities.Category
+
+@{
+    ViewBag.Title = "Browse Products";
+}
+
+<div class="Category">
+    <h3><em>@Model.CategoryName</em> Products</h3>
+
+    <ul id="album-list">
+        @foreach (var product in Model.Products)
+        {
+            <li>
+                <a href="@Url.Action("Details", new { id = product.Id })">
+                    <img alt="@product.ProductName" src="@product.ImageURL" />
+                    <span>@product.ProductName</span>
+                </a>
+            </li>
+        }
+    </ul>
+</div>

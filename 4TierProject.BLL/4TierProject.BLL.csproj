@@ -66,6 +66,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -74,11 +75,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\BaseRepository.cs" />
+    <Compile Include="Base\DatabaseContextFactory.cs" />
+    <Compile Include="DataServices\CartRepository.cs" />
+    <Compile Include="DataServices\CategoryRepository.cs" />
+    <Compile Include="DataServices\OrderRepository.cs" />
+    <Compile Include="DataServices\ProductRepository.cs" />
+    <Compile Include="Managers\ApplicationRoleManager.cs" />
+    <Compile Include="Managers\ApplicationSignInManager.cs" />
+    <Compile Include="Managers\ApplicationUserManager.cs" />
+    <Compile Include="MessageServices\EmailService.cs" />
+    <Compile Include="MessageServices\SmsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\4TierProject.Common\4TierProject.Common.csproj">
+      <Project>{2D0AF521-A51A-4001-B156-546B8BE2F36A}</Project>
+      <Name>4TierProject.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\4TierProject.DAL\4TierProject.DAL.csproj">
+      <Project>{45419596-99DE-4A69-892C-7EA2E5BF880F}</Project>
+      <Name>4TierProject.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

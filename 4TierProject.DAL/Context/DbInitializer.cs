@@ -27,9 +27,9 @@ namespace _4TierProject.DAL.Context
             //    );
             //
 
-            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new DatabaseContext()));
+            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new DatabaseContext()));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 
             var user = new ApplicationUser()
             {
@@ -59,6 +59,8 @@ namespace _4TierProject.DAL.Context
             var adminUser = manager.FindByName("m.kemal.kayahan@hotmail.com");
 
             manager.AddToRoles(adminUser.Id, new string[] { "Admin", "Manager" });
+
+            context.SaveChanges();
         }
     }
 }

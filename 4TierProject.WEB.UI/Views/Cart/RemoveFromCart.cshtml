@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "RemoveFromCart";
+}
+
+<h2>RemoveFromCart</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        <input type="submit" value="Remove" />
+    </p>
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+
+}

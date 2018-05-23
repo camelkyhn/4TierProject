@@ -74,11 +74,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\DatabaseContext.cs" />
+    <Compile Include="Context\DbInitializer.cs" />
+    <Compile Include="Context\IDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryService\Repository.cs" />
+    <Compile Include="RepositoryService\RepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\4TierProject.Common\4TierProject.Common.csproj">
+      <Project>{2D0AF521-A51A-4001-B156-546B8BE2F36A}</Project>
+      <Name>4TierProject.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,34 @@
+﻿@model _4TierProject.Common.Entities.Product
+
+@{
+    ViewBag.Title = "Product - " + Model.ProductName;
+}
+
+<h2>@Model.ProductName</h2>
+
+<p>
+    <img alt="@Model.ProductName" src="@Model.ImageURL" />
+</p>
+
+<div id="Product-details">
+    <p>
+        <em>Category:</em>
+        @ViewBag.productCategoryName
+    </p>
+    <p>
+        <em>Description:</em>
+        @Model.ProductDescription
+    </p>
+    <p>
+        <em>Stock:</em>
+        @Model.Stock
+    </p>
+    <p>
+        <em>Price:</em>
+        @String.Format("{0:F}", Model.UnitPrice)
+    </p>
+    <p class="button">
+        @Html.ActionLink("Add to cart", "AddToCart",
+        "Cart", new { id = Model.Id }, "")
+    </p>
+</div>

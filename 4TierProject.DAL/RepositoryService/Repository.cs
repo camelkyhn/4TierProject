@@ -1,4 +1,5 @@
 ﻿using _4TierProject.Common.DataAccess;
+using _4TierProject.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace _4TierProject.DAL.RepositoryService
 {
-    public class Repository<T> : RepositoryBase, IDataAccess<T> where T : class
+    public class Repository<T> : RepositoryBase, IDataAccess<T> where T : EntityBase
     {
         private DbSet<T> entitySet;
 
@@ -22,6 +23,11 @@ namespace _4TierProject.DAL.RepositoryService
         public bool Any(Expression<Func<T, bool>> _lamda)
         {
             return entitySet.Any(_lamda);
+        }
+
+        public IQueryable<T> Include(string searchString)
+        {
+            return entitySet.Include(searchString);
         }
 
         public int Delete(T entity)

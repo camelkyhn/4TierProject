@@ -1,4 +1,5 @@
 ﻿using _4TierProject.Common.DataAccess;
+using _4TierProject.Common.Entities;
 using _4TierProject.DAL.RepositoryService;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace _4TierProject.BLL.Base
 {
-    public abstract class BaseRepository<T> : IDataAccess<T> where T : class
+    public abstract class BaseRepository<T> : IDataAccess<T> where T : EntityBase
     {
         private Repository<T> repository;
 
@@ -21,6 +22,11 @@ namespace _4TierProject.BLL.Base
         public bool Any(Expression<Func<T, bool>> _lamda)
         {
             return repository.Any(_lamda);
+        }
+
+        public IQueryable<T> Include(string searchString)
+        {
+            return repository.Include(searchString);
         }
 
         public int Delete(T entity)

@@ -17,6 +17,7 @@ namespace _4TierProject.Common.DataAccess
         IQueryable<T> GetListQueryable();
         List<T> GetList(Expression<Func<T, bool>> _lamda);
         bool Any(Expression<Func<T, bool>> _lamda);
+        IQueryable<T> Include(string searchString);
         void Dispose();
         T FindByExpression(Expression<Func<T, bool>> _lamda);
     }

@@ -1,0 +1,16 @@
+﻿@model IEnumerable<_4TierProject.Common.Entities.Category>
+@{
+    ViewBag.Title = "Store";
+}
+<h3>Browse Categories</h3>
+
+<p>
+    Select from @Model.Count() categories:
+</p>
+<ul>
+    @foreach (var category in Model)
+    {
+        <li>@Html.ActionLink(category.CategoryName, "Browse", new { category = category.CategoryName })</li>
+    }
+</ul>
+

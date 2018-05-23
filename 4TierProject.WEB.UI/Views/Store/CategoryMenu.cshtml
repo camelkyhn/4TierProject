@@ -1,0 +1,12 @@
+﻿@model IEnumerable<_4TierProject.Common.Entities.Category>
+
+<ul id="categories">
+    @foreach (var category in Model)
+    {
+        <li>
+            @Html.ActionLink(category.CategoryName,
+                "Browse", "Store",
+                new { Category = category.CategoryName }, null)
+        </li>
+    }
+</ul>

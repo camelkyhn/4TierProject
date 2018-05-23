@@ -1,66 +1,29 @@
-﻿using System;
+﻿using _4TierProject.WEB.UI.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using _4TierProject.WEB.UI.Models;
 
 namespace _4TierProject.WEB.UI.Controllers
 {
-    [Authorize]
-    public class ManageController : Controller
+    [CustomAuthorize]
+    public class ManageController : BaseController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
-        public ManageController()
-        {
-        }
-
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                message == ManageMessageId.ChangePasswordSuccess ? "Parolanız değiştirildi."
+                : message == ManageMessageId.SetPasswordSuccess ? "Parolanız ayarlandı."
+                : message == ManageMessageId.SetTwoFactorSuccess ? "İki öğeli kimlik doğrulama sağlayıcısı ayarlandı."
+                : message == ManageMessageId.Error ? "Hata oluştu."
+                : message == ManageMessageId.AddPhoneSuccess ? "Telefon numaranız eklendi."
+                : message == ManageMessageId.RemovePhoneSuccess ? "Telefon numaranız kaldırıldı."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -116,14 +79,14 @@ namespace _4TierProject.WEB.UI.Controllers
             {
                 return View(model);
             }
-            // Generate the token and send it
+            // Belirteç oluştur ve gönder
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
             if (UserManager.SmsService != null)
             {
                 var message = new IdentityMessage
                 {
                     Destination = model.Number,
-                    Body = "Your security code is: " + code
+                    Body = "Güvenlik kodunuz: " + code
                 };
                 await UserManager.SmsService.SendAsync(message);
             }
@@ -165,7 +128,7 @@ namespace _4TierProject.WEB.UI.Controllers
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
-            // Send an SMS through the SMS provider to verify the phone number
+            // Telefon numaranızı doğrulamak için SMS sağlayıcınız üzerinden SMS gönderin
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
@@ -189,8 +152,8 @@ namespace _4TierProject.WEB.UI.Controllers
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
-            // If we got this far, something failed, redisplay form
-            ModelState.AddModelError("", "Failed to verify phone");
+            // Bir hata oluştu, formu yeniden görüntüleyin
+            ModelState.AddModelError("", "Telefon numarası doğrulanamadı");
             return View(model);
         }
 
@@ -272,7 +235,7 @@ namespace _4TierProject.WEB.UI.Controllers
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
+            // Bir hata oluştu, formu yeniden görüntüleyin
             return View(model);
         }
 
@@ -281,8 +244,8 @@ namespace _4TierProject.WEB.UI.Controllers
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.Error ? "An error has occurred."
+                message == ManageMessageId.RemoveLoginSuccess ? "Dış oturum kaldırıldı."
+                : message == ManageMessageId.Error ? "Hata oluştu."
                 : "";
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user == null)
@@ -305,7 +268,7 @@ namespace _4TierProject.WEB.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
         {
-            // Request a redirect to the external login provider to link a login for the current user
+            // Oturumun geçerli kullanıcıya bağlaması için dış oturum sağlayıcısının yeniden yönlendirilmesini isteyin
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
 
@@ -322,19 +285,8 @@ namespace _4TierProject.WEB.UI.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
-
-            base.Dispose(disposing);
-        }
-
-#region Helpers
-        // Used for XSRF protection when adding external logins
+        #region Yardımcılar
+        // Dış oturumlar eklenirken XSRF koruması için kullanıldı
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager
@@ -384,6 +336,6 @@ namespace _4TierProject.WEB.UI.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }
